@@ -1,28 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.filme import FilmeModel
-
-filmes = [
-    {
-        'filme_id': 0,
-        'nome':'47 Ronins',
-        'genero': 1365,
-        'imdb':7.7,
-    },
-    {
-        'filme_id': 1,
-        'nome':'14 montanhas',
-        'genero': 1365,
-        'imdb':5.7,
-    },
-    {
-        'filme_id': 2,
-        'nome':'Rambo',
-        'genero': 1365,
-        'imdb':4.7,
-    }
-]
-
-
+from flask_jwt_extended import jwt_required
 
 class Filmes(Resource):
 
@@ -43,6 +21,7 @@ class Filme(Resource):
             return filme.json()
         return {'message':'Filme não encontrado'}, 404 #not_found
 
+    @jwt_required()
     def post(self, filme_id):
 
         if FilmeModel.find_filme(filme_id):
@@ -53,6 +32,7 @@ class Filme(Resource):
         filme_objeto.save_filme()
         return filme_objeto.json()
 
+    @jwt_required()
     def put(self, filme_id):
 
         dados = Filme.argumentos.parse_args()
@@ -69,6 +49,7 @@ class Filme(Resource):
             filme_novo.save_filme()
             return filme_novo.json(), 201 #criado
 
+    @jwt_required()
     def delete(self, filme_id):
         # global filmes
         # filmes = [filme for filme in filmes if filme['filme_id'] != filme_id]
