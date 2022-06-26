@@ -2,9 +2,21 @@ from flask_restful import Resource, reqparse
 from models.filme import FilmeModel
 from flask_jwt_extended import jwt_required
 
+#path / filmes?genero=1234&imdb_min=7.0&imadb_max=8.0
+path_params = reqparse.RequestParser()
+path_params.add_argument('genero', type=int)
+path_params.add_argument('imdb_min', type=float)
+path_params.add_argument('imdb_max', type=float)
+path_params.add_argument('limit', type=float)
+path_params.add_argument('offset', type=float)
+
+
 class Filmes(Resource):
 
     def get(self):
+
+        dados = path_params.parse_args()
+        dados_validos = {chave:dados[chave] for chave in dados if dados[chave] is not None}
         return {'filmes': [filme.json() for filme in FilmeModel.query.all()]}
 
 class Filme(Resource):

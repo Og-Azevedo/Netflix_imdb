@@ -50,7 +50,7 @@ class UserLogin(Resource):
             return {'acces_token': token_de_acesso}, 200
         return {'message':'The login or password is incorrect.'}, 401
 
-class UserLogout():
+class UserLogout(Resource):
 
     @jwt_required()
     def post(self):
